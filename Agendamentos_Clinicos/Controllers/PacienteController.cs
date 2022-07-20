@@ -1,11 +1,8 @@
 ﻿using Agendamentos_Clinicos.Models.Dtos;
 using Agendamentos_Clinicos.Models.Entities;
 using Agendamentos_Clinicos.Repository.Interfaces;
-using Agendamentos_Clinicos.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,8 +43,23 @@ namespace Agendamentos_Clinicos.Controllers
                 return Ok(pacienteRetorno);
             }else
             {
-                return BadRequest("Paciente não Agendado");
+                return BadRequest("Paciente não Agendado");        
             }
         }
-    }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(AdicionarPacienteDto paciente)
+        {
+            if (paciente == null) return BadRequest("Dados Invalidos");
+
+            var adicionarPaciente = _mapper.Map<Paciente>(paciente);
+
+            _repository.Add(adicionarPaciente);
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Paciente agendado com sucesso")
+                : BadRequest("Erro ao agendar o paciente");                   
+
+        }
+    }         
 }

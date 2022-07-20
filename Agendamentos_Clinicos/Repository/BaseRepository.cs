@@ -1,6 +1,7 @@
 ﻿using Agendamentos_Clinicos.Context;
 using Agendamentos_Clinicos.Repository.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace Agendamentos_Clinicos.Repository
 {
@@ -16,7 +17,7 @@ namespace Agendamentos_Clinicos.Repository
 
         public void Add<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            _context.Add(entity);
         }
 
         public void Delete<T>(T entity) where T : class
@@ -24,9 +25,9 @@ namespace Agendamentos_Clinicos.Repository
             throw new NotImplementedException();
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public void Update<T>(T entity) where T : class
