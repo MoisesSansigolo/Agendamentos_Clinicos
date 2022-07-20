@@ -61,5 +61,39 @@ namespace Agendamentos_Clinicos.Controllers
                 : BadRequest("Erro ao agendar o paciente");                   
 
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, AtualizandoPacienteDto paciente)
+        {
+            if (id <= 0) return BadRequest("Paciente não informado");
+
+            var pacienteExistente = await _repository.GetByIdAsync(id);
+
+            var pacienteAtualizado = _mapper.Map(paciente, pacienteExistente);
+
+            _repository.Update(pacienteAtualizado);
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Paciente atualizado com sucesso")
+                : BadRequest("Erro ao atualizar o paciente");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Paciente não encontrado");
+            }
+            var excluiPaciente = await _repository.GetByIdAsync(id);
+
+            if (excluiPaciente == null) return NotFound("Paciente não encontrado");
+
+            _repository.Delete(excluiPaciente);
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Paciente deletado com sucesso")
+                : BadRequest("Erro ao tentar deletar o paciente");
+        }
     }         
 }
