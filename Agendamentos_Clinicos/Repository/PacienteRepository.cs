@@ -1,6 +1,7 @@
 ﻿using Agendamentos_Clinicos.Context;
 using Agendamentos_Clinicos.Models.Entities;
 using Agendamentos_Clinicos.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Agendamentos_Clinicos.Repository
 {
-    public class PacienteRepository :BaseRepository, IPacienteRepository
+    public class PacienteRepository : BaseRepository, IPacienteRepository
     {
         private readonly AgendamentoContext _context;
 
@@ -17,34 +18,18 @@ namespace Agendamentos_Clinicos.Repository
             _context = context;
         }
 
-        public void Add<T>(T entity) where T : class
+        public async Task<IEnumerable<Paciente>> GetAsync() //busca todos os pacientes
         {
-            throw new NotImplementedException();
+            var paciente =await _context.Pacientes.Include(x => x.Consultas).ToListAsync();
+            return paciente;
         }
 
-        public void Delete<T>(T entity) where T : class
+        public async Task<Paciente> GetByIdAsync(int id) //Busca paciente por ID
         {
-            throw new NotImplementedException();
+            var pacienteId =await _context.Pacientes.Include(x => x.Consultas).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return (pacienteId);
         }
 
-        public IEnumerable<Paciente> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Paciente GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update<T>(T entity) where T : class
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

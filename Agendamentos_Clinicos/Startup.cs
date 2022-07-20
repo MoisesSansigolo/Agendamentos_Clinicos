@@ -1,4 +1,6 @@
 using Agendamentos_Clinicos.Context;
+using Agendamentos_Clinicos.Repository;
+using Agendamentos_Clinicos.Repository.Interfaces;
 using Agendamentos_Clinicos.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +25,12 @@ namespace Agendamentos_Clinicos
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options => {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+            services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddScoped<IPacienteRepository, PacienteRepository>();
+            
             services.AddDbContext<AgendamentoContext>(options =>
             {
             options.UseNpgsql(Configuration.GetConnectionString("Default"),
