@@ -1,6 +1,8 @@
-﻿using Agendamentos_Clinicos.Models.Entities;
+﻿using Agendamentos_Clinicos.Models.Dtos;
+using Agendamentos_Clinicos.Models.Entities;
 using Agendamentos_Clinicos.Repository.Interfaces;
 using Agendamentos_Clinicos.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,16 +16,19 @@ namespace Agendamentos_Clinicos.Controllers
     public class PacienteController : ControllerBase
     {
         private readonly IPacienteRepository _repository;
+        private readonly IMapper _mapper;
 
-        public PacienteController(IPacienteRepository repository)
+        public PacienteController(IPacienteRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var pacientes = await _repository.GetAsync();
+
             return pacientes.Any()
                 ? Ok(pacientes)
                 : BadRequest("Paciente não registrado");
@@ -33,12 +38,15 @@ namespace Agendamentos_Clinicos.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var pacienteId = await _repository.GetByIdAsync(id);
-            if (pacienteId != null)
+
+            var pacienteRetorno = _mapper.Map<PacienteDetalheDto>(pacienteId);
+
+            if (pacienteRetorno != null)
             {
-                return Ok(pacienteId);
+                return Ok(pacienteRetorno);
             }else
             {
-                return BadRequest("Paciente não ")
+                return BadRequest("Paciente não Agendado");
             }
         }
     }
