@@ -102,5 +102,47 @@ namespace Agendamentos_Clinicos.Controllers
                 : BadRequest("Erro ao tentar excluir o funcionario");
         }
 
+
+        //Adicionando especialidade ao profissional
+        [HttpPost("Add-profissional")]
+        public async Task<IActionResult> PostProfEspec(ProfEspecAddDto profissional)
+        {
+            int profissionalId = profissional.ProfissionalId;
+            int especialidadeId = profissional.EspecialidadeId;
+
+            if (profissionalId <= 0 || especialidadeId <= 0) return BadRequest("Dados invalidos");
+
+            var profissionalEspecialidade = await _repository.GetProfEspec(profissionalId, especialidadeId);
+
+            if (profissionalEspecialidade != null) return Ok("Especialidade já cadastrada");
+
+            var adicionarEspecialidade = new ProfissionalEspecialidade
+            {
+                EspecialidadeId = especialidadeId,
+                ProfissionalId = profissionalId
+            };
+            _repository.Add(adicionarEspecialidade);
+            return await _repository.SaveChangesAsync()
+                ? Ok("Especialidade adicionada")
+                : BadRequest("Erro ao adicionar especialidade");
+        }
+        //Deletando especialidade do profissional
+
+        [HttpDelete("{profId}/Del-Espec/{especId}")]
+        public async Task<IActionResult>DelProfEspec(int profId, int especId)
+        {
+            if (profId <= 0 || especId <= 0) return BadRequest("Dados Invalidos");
+
+            var profissionalEspecialidade = await _repository.GetProfEspec(profId, especId);
+
+            if (profissionalEspecialidade == null) return Ok("Especialidade não cadastrada");
+
+            _repository.Delete(profissionalEspecialidade);
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Deletado com sucesso a especialidade")
+                : BadRequest("Erro ao tentar deletar a especilidade");
+        }
+
     }
 }

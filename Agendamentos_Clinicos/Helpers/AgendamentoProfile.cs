@@ -25,10 +25,16 @@ namespace Agendamentos_Clinicos.Helpers
             CreateMap<Profissional, ProfissionalDetalhesDto>()
                 .ForMember(dest => dest.TotalConsultas, opt => opt.MapFrom(src => src.Consultas.Count()))
                 .ForMember(dest => dest.Especialidades, opt => opt.MapFrom(src => src.Especialidades.Select(x => x.Nome).ToArray()));
+            CreateMap<Profissional, ProfissionalDto>();    
+
+
 
             CreateMap<AdicionarProfissionalDto, Profissional>();
             CreateMap<AtualizarProfissionalDto, Profissional>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<Especialidade, EspecialidadeDetalheDto>();
+            CreateMap<AdicionarEspecialidadeDto, Especialidade>();
         }
     }
 }

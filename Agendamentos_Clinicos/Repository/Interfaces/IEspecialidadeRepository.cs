@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Agendamentos_Clinicos.Repository.Interfaces
 {
-    public interface IProfissionalRepository : IBaseRepository
+    public interface IEspecialidadeRepository : IBaseRepository
     {
-        Task<IEnumerable<ProfissionalDto>> Get();
-        Task<Profissional> GetByIdAsync(int id);
-        Task<ProfissionalEspecialidade> GetProfEspec(int profissionalId, int especialidadeId);
+        Task<IEnumerable<EspecialidadeDto>> GetAsync();
+        Task<Especialidade> GetByIdAsync(int id);
     }
 }
