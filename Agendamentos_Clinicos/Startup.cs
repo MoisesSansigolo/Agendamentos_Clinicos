@@ -28,10 +28,11 @@ namespace Agendamentos_Clinicos
             services.AddControllers().AddNewtonsoftJson(options => {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(Startup));            
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IPacienteRepository, PacienteRepository>();
-            
+            services.AddScoped<IProfissionalRepository, ProfissionalRepository>();
+
             services.AddDbContext<AgendamentoContext>(options =>
             {
             options.UseNpgsql(Configuration.GetConnectionString("Default"),
