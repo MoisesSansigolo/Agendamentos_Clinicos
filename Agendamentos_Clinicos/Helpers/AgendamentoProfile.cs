@@ -13,10 +13,17 @@ namespace Agendamentos_Clinicos.Helpers
         public AgendamentoProfile()
         {
             CreateMap<Paciente, PacienteDetalheDto>();
+            CreateMap<Paciente, PacienteDto>();
                 //.ForMember(dest => dest.Email, opt => opt.Ignore()); //USADO PARA ESCONDER DETALHES DO CAMPO
             CreateMap<Consulta, ConsultaDto>()
                 .ForMember(dest => dest.Especialidade, opt => opt.MapFrom(src => src.Especialidade.Nome))
                 .ForMember(dest => dest.Profissional, opt => opt.MapFrom(src => src.Profissional.Nome));
+
+            CreateMap<Consulta, ConsultaDetalhesDto>();
+            CreateMap<AdicionarConsultaDto, Consulta>();
+            CreateMap<AtualizaConsultaDto, Consulta>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
 
             CreateMap<AdicionarPacienteDto, Paciente>();
             CreateMap<AtualizandoPacienteDto, Paciente>()
@@ -35,6 +42,7 @@ namespace Agendamentos_Clinicos.Helpers
 
             CreateMap<Especialidade, EspecialidadeDetalheDto>();
             CreateMap<AdicionarEspecialidadeDto, Especialidade>();
+            CreateMap<Especialidade, EspecialidadeDto>();
         }
     }
 }

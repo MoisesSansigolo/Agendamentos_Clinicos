@@ -33,6 +33,7 @@ namespace Agendamentos_Clinicos
             services.AddScoped<IPacienteRepository, PacienteRepository>();
             services.AddScoped<IProfissionalRepository, ProfissionalRepository>();
             services.AddScoped<IEspecialidadeRepository, EspecialidadeRepository>();
+            services.AddScoped<IConsultaRepository, ConsultaRepository>();
 
             services.AddDbContext<AgendamentoContext>(options =>
             {
